@@ -1,9 +1,6 @@
-<p align="center">
-  <a href="LICENSE">
-    <img src="https://img.shields.io/badge/license-Apache%202.0-blue"
-         alt="License: Apache 2.0">
-  </a>
-</p>
+# Limanix modules
+
+[![License: Apache-2.0](https://img.shields.io/github/license/mr-chelyshkin/limanix-modules?label=license)](LICENSE)
 
 <p align="center">
   <img src=".github/assets/readme-header.png"
