@@ -1,0 +1,43 @@
+name: Release Limanix modules
+
+on:
+  push:
+    tags: ['[0-9]*']
+
+concurrency:
+  group: limanix-modules-release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: mr-chelyshkin/actions/check-tag-branch@v1
+        with:
+          branch: main
+
+  checks:
+    needs: verify
+    uses: mr-chelyshkin/actions/.github/workflows/pr-nix.yml@v1
+
+  release:
+    name: Create GitHub release
+    needs: checks
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
