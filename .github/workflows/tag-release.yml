@@ -12,8 +12,20 @@ permissions:
   contents: read
 
 jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - uses: mr-chelyshkin/actions/check-tag-branch@v1
+        with:
+          branch: main
+
   release:
     name: Create GitHub release
+    needs: verify
     runs-on: ubuntu-24.04
     permissions:
       contents: write
