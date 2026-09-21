@@ -1,13 +1,4 @@
-{ pkgs, ... }:
-{
-  environment.systemPackages = with pkgs; [
-    rustc
-    cargo
-    rustfmt
-    clippy
-    rust-analyzer
-    gcc
-    pkg-config
-    gdb
-  ];
-}
+let
+  metadata = builtins.fromTOML (builtins.readFile ./module.toml);
+in
+import (./versions + "/${metadata.default}.nix")

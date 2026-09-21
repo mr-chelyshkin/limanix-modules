@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-{
-  environment.systemPackages = with pkgs; [
-    nodejs
-  ];
-}
+let
+  metadata = builtins.fromTOML (builtins.readFile ./module.toml);
+in
+import (./versions + "/${metadata.default}.nix")

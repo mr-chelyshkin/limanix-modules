@@ -1,8 +1,4 @@
-{ pkgs, ... }:
-{
-  environment.systemPackages = with pkgs; [
-    go
-    gopls
-    delve
-  ];
-}
+let
+  metadata = builtins.fromTOML (builtins.readFile ./module.toml);
+in
+import (./versions + "/${metadata.default}.nix")

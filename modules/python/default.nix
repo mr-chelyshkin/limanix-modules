@@ -1,7 +1,4 @@
-{ pkgs, ... }:
-{
-  environment.systemPackages = with pkgs; [
-    python3
-    python3Packages.virtualenv
-  ];
-}
+let
+  metadata = builtins.fromTOML (builtins.readFile ./module.toml);
+in
+import (./versions + "/${metadata.default}.nix")

@@ -1,5 +1,4 @@
-{ runtime, ... }:
-{
-  virtualisation.docker.enable = true;
-  users.users.${runtime.user.name}.extraGroups = [ "docker" ];
-}
+let
+  metadata = builtins.fromTOML (builtins.readFile ./module.toml);
+in
+import (./versions + "/${metadata.default}.nix")

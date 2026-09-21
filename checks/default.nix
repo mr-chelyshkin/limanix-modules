@@ -1,5 +1,6 @@
 let
   catalog = import ./catalog.nix ../modules;
+  variants = builtins.concatMap (module: module.variants) catalog;
   nixpkgs = import ./nixpkgs.nix;
   systems = {
     arm64 = "aarch64-linux";
@@ -29,6 +30,23 @@ let
         }) catalog
       );
       combined = evaluate "all modules" catalog;
+      versions = builtins.listToAttrs (
+        builtins.map (variant: {
+          inherit (variant) name;
+          value = evaluate variant.name [ variant ];
+        }) variants
+      );
+      combinations = builtins.listToAttrs (
+        builtins.concatMap (
+          module:
+          builtins.map (variant: {
+            inherit (variant) name;
+            value = evaluate "all modules with ${variant.name}" (
+              builtins.map (selected: if selected.name == module.name then variant else selected) catalog
+            );
+          }) module.variants
+        ) catalog
+      );
     };
 in
 builtins.deepSeq catalog (builtins.mapAttrs checkSystem systems)
