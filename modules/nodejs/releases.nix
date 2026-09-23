@@ -38,6 +38,10 @@
       package = "nodejs_26";
       version = "26.9.0";
       endOfLife = false;
+      npm = {
+        version = "12.1.0";
+        hash = "sha512-Fyhu62pNx70YCs/5+dEmJQTFVmSKwvo5CA0qvBkGDRpob42MJ6G2RQ2tdxeKM4nYnIZDqkYAxEgqtoejn9QGtQ==";
+      };
     };
   };
 }
