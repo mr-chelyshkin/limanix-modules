@@ -37,3 +37,30 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: true
+
+  notify-limanix:
+    name: Notify Limanix
+    needs: release
+    runs-on: ubuntu-24.04
+    permissions: {}
+    steps:
+      - name: Create Limanix access token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          owner: mr-chelyshkin
+          repositories: limanix
+          permission-contents: write
+      - name: Send module release event
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          MODULES_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          gh api --method POST repos/mr-chelyshkin/limanix/dispatches \
+            -f event_type=limanix-modules-release \
+            -f "client_payload[tag]=$MODULES_TAG"
